@@ -1,0 +1,5 @@
+# Do not show the introduction screen ("Press bla to bla.")
+startup_message off
+
+hardstatus alwayslastline
+hardstatus string "%-w%{= BW}%50>%n %t%{-}%+w%<"
