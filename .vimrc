@@ -21,9 +21,7 @@ set number              " show line numbers
 set showcmd             " show command in bottom bar
 " set cursorline          " highlight current line
 set wildmenu            " visual autocomplete for command menu
-set lazyredraw          " redraw only when we need to.
 set ruler
-set showcmd
 
 " Searching
 set incsearch           " search as characters are entered
@@ -44,12 +42,12 @@ map <right> <nop>
 " leader shortcuts
 " " jk is escape
 inoremap jk <esc>
-" " save session
-nnoremap <leader>s :mksession ~/session.vim<CR>
 " " save quicker
 nnoremap <leader>w :w<CR>
 " " turn off search highlight
 nnoremap <leader><space> :nohlsearch<CR>
+" " boot up nerdtree
+map <leader>n :NERDTreeToggle<CR>
 
 set nocompatible              " required
 filetype off                  " required
@@ -68,7 +66,8 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'rking/ag.vim'
-Plugin 'tpope/vim-sleuth'
+Plugin 'terryma/vim-multiple-cursors'
+Plugin 'tpope/vim-fugitive'
 
 " Add all your plugins here (note older versions of Vundle used Bundle instead of Plugin)
 
