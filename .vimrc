@@ -15,6 +15,17 @@ set expandtab
 match ErrorMsg '\s\+$'
 nnoremap <Leader>rtw :%s/\s\+$//e<CR>
 
+" But wrap text for txt/markdown
+autocmd FileType markdown set wrap linebreak textwidth=0
+autocmd FileType txt set wrap linebreak textwidth=0
+
+" If wrapping is enabled, mark wrapped lines
+set showbreak=\ ->\
+
+" But not for txt/markdown
+autocmd FileType markdown set showbreak=
+autocmd FileType txt set showbreak=
+
 " ui config
 " set clipboard=unnamed
 set number              " show line numbers
@@ -68,6 +79,7 @@ Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'rking/ag.vim'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'tpope/vim-fugitive'
+Plugin 'hallison/vim-markdown'
 
 " Add all your plugins here (note older versions of Vundle used Bundle instead of Plugin)
 

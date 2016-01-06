@@ -3,3 +3,6 @@ startup_message off
 
 hardstatus alwayslastline
 hardstatus string "%-w%{= BW}%50>%n %t%{-}%+w%<"
+
+defscrollback 32000
+defutf8 on
