@@ -80,6 +80,7 @@ Plugin 'rking/ag.vim'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'tpope/vim-fugitive'
 Plugin 'hallison/vim-markdown'
+Plugin 'tclem/vim-arduino'
 
 " Add all your plugins here (note older versions of Vundle used Bundle instead of Plugin)
 
@@ -91,3 +92,9 @@ filetype plugin indent on    " required
 let g:ctrlp_match_window = 'bottom,order:ttb'
 let g:ctrlp_switch_buffer = 0
 let g:ctrlp_working_path_mode = 0
+
+" vim-ardunio settings
+" Default: /Applications/Arduino.app/Contents/Resources/Java
+" let g:vim_arduino_library_path = /path/to/arduino/installation
+" Default: result of `$(ls /dev/tty.* | grep usb)`
+" let g:vim_arduino_serial_port = /my/serial/port
