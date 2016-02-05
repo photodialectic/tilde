@@ -8,13 +8,11 @@ My dot files repo.
 
 `cd tilde`
 
-`git submodule init`
-
-`git submodule update`
-
 `./install.sh`
 
 ## update
+
+`cd ~/tilde`
 
 `./install.sh`
 
