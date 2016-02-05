@@ -77,11 +77,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'kien/ctrlp.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mustache/vim-mustache-handlebars'
-Plugin 'rking/ag.vim'
-Plugin 'terryma/vim-multiple-cursors'
-Plugin 'tpope/vim-fugitive'
 Plugin 'hallison/vim-markdown'
-Plugin 'tclem/vim-arduino'
 
 " Add all your plugins here (note older versions of Vundle used Bundle instead of Plugin)
 
