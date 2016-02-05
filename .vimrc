@@ -1,3 +1,4 @@
+" change
 " Don't write any backup or swap files ever.
 " " They're more annoying than they are safe.
 set noswapfile
@@ -20,7 +21,7 @@ autocmd FileType markdown set wrap linebreak textwidth=0
 autocmd FileType txt set wrap linebreak textwidth=0
 
 " If wrapping is enabled, mark wrapped lines
-set showbreak=\ ->\
+" set showbreak=\ ->\
 
 " But not for txt/markdown
 autocmd FileType markdown set showbreak=

@@ -1,0 +1,17 @@
+[core]
+	whitespace = space-before-tab,trailing-space,cr-at-eol
+	ignorecase = false
+	editor = vi
+[diff]
+	renames = copy
+[pack]
+	threads = 0
+[push]
+	default = simple
+[credential]
+	helper = osxkeychain
+[user]
+	name = Nick Hedberg
+	email = nick.hedberg@buzzfeed.com
+[color "diff"]
+    new = cyan black bold
