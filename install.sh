@@ -70,6 +70,9 @@ fi;
 source_dir="$(cd "$(dirname "$0")" > /dev/null; pwd)";
 $is_dry_run || target_dir="$(cd "$target_dir" > /dev/null; pwd)";
 
+echo "running git submodules";
+git submodule init && git submodule update;
+
 # Create the array of files to symlink.
 source_files=();
 ignored_files=(
