@@ -74,6 +74,7 @@ $is_dry_run || target_dir="$(cd "$target_dir" > /dev/null; pwd)";
 source_files=();
 ignored_files=(
     .gitignore
+    .gitmodules
     COPYING
     README.md
     install.sh
