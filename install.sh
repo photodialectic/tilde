@@ -70,8 +70,8 @@ fi;
 source_dir="$(cd "$(dirname "$0")" > /dev/null; pwd)";
 $is_dry_run || target_dir="$(cd "$target_dir" > /dev/null; pwd)";
 
-echo "running git submodules";
-git submodule init && git submodule update;
+echo "Get Vundle from submodule";
+$dry_run git submodule init && git submodule update;
 
 # Create the array of files to symlink.
 source_files=();
@@ -271,5 +271,9 @@ for file in "${source_files[@]}"; do
     fi;
 done;
 $has_created_links || echo "All of Tilde's files were symlinked already.";
+
+echo "Install vim plugins";
+$dry_run vim +PluginInstall +qall;
+
 echo 'Done.';
 

@@ -1,4 +1,3 @@
-" change
 " Don't write any backup or swap files ever.
 " " They're more annoying than they are safe.
 set noswapfile
@@ -78,6 +77,7 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'hallison/vim-markdown'
+Plugin 'tpope/vim-fugitive'
 
 " Add all your plugins here (note older versions of Vundle used Bundle instead of Plugin)
 
