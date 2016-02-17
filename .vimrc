@@ -11,6 +11,8 @@ set encoding=utf-8
 " spaces & tabs
 set tabstop=4
 set shiftwidth=4
+" js files are two spaces...
+autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2
 set expandtab
 match ErrorMsg '\s\+$'
 nnoremap <Leader>rtw :%s/\s\+$//e<CR>
@@ -18,9 +20,6 @@ nnoremap <Leader>rtw :%s/\s\+$//e<CR>
 " But wrap text for txt/markdown
 autocmd FileType markdown set wrap linebreak textwidth=0
 autocmd FileType txt set wrap linebreak textwidth=0
-
-" If wrapping is enabled, mark wrapped lines
-" set showbreak=\ ->\
 
 " But not for txt/markdown
 autocmd FileType markdown set showbreak=
@@ -35,13 +34,16 @@ set wildmenu            " visual autocomplete for command menu
 set ruler
 
 " Searching
-set incsearch           " search as characters are entered
-set hlsearch            " highlight matches
+set incsearch ignorecase smartcase hlsearch " search as characters are entered
+
 
 " More reasonable scroll keys
 map J <c-e>
 map K <c-y>
-" Map <leader><leader> to switch to last buffer
+
+" buffer nav
+nnoremap <Tab> :bnext<CR>
+nnoremap <S-Tab> :bprevious<CR>
 nnoremap <leader><leader> <c-^>
 
 " Turn off arrow to be a better person
@@ -78,7 +80,9 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'hallison/vim-markdown'
 Plugin 'tpope/vim-fugitive'
-
+Plugin 'vim-perl/vim-perl'
+Plugin 'bling/vim-bufferline'
+Plugin 'itchyny/lightline.vim'
 " Add all your plugins here (note older versions of Vundle used Bundle instead of Plugin)
 
 " All of your Plugins must be added before the following line
@@ -90,8 +94,19 @@ let g:ctrlp_match_window = 'bottom,order:ttb'
 let g:ctrlp_switch_buffer = 0
 let g:ctrlp_working_path_mode = 0
 
-" vim-ardunio settings
-" Default: /Applications/Arduino.app/Contents/Resources/Java
-" let g:vim_arduino_library_path = /path/to/arduino/installation
-" Default: result of `$(ls /dev/tty.* | grep usb)`
-" let g:vim_arduino_serial_port = /my/serial/port
+" Perl syntax stuff
+autocmd BufNewFile,BufRead *.tt setf tt2
+
+" Lightline settings
+let g:lightline = {
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'fugitive' ] ]
+      \ },
+      \ 'component_function': {
+      \   'fugitive': 'LightLineFugitive',
+      \ }
+      \ }
+function! LightLineFugitive()
+  return exists('*fugitive#head') ? fugitive#head() : ''
+endfunction
