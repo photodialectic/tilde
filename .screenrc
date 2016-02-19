@@ -6,3 +6,5 @@ hardstatus string "%-w%{= BW}%50>%n %t%{-}%+w%<"
 
 defscrollback 32000
 defutf8 on
+
+term screen-256color
