@@ -74,7 +74,6 @@ call vundle#begin()
 
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
-Plugin 'scrooloose/nerdtree'
 Plugin 'kien/ctrlp.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mustache/vim-mustache-handlebars'
@@ -83,6 +82,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'vim-perl/vim-perl'
 Plugin 'bling/vim-bufferline'
 Plugin 'itchyny/lightline.vim'
+Plugin 'heavenshell/vim-jsdoc'
 " Add all your plugins here (note older versions of Vundle used Bundle instead of Plugin)
 
 " All of your Plugins must be added before the following line
@@ -110,3 +110,5 @@ let g:lightline = {
 function! LightLineFugitive()
   return exists('*fugitive#head') ? fugitive#head() : ''
 endfunction
+
+nnoremap <leader>js :-1read $HOME/.vim/templates/skel.js<CR>:%s/@BASENAME@
