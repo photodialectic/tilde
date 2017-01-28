@@ -124,3 +124,4 @@ endfunction
 
 nnoremap <leader>js :-1read $HOME/.vim/templates/skel.js<CR>:%s/@BASENAME@
 nnoremap <leader>py :-1read $HOME/.vim/templates/server.py
+nnoremap <leader>o :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<CR> \| xargs open<CR><CR>
