@@ -13,9 +13,10 @@ set tabstop=4
 set shiftwidth=4
 " js files are two spaces...
 autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2
+autocmd Filetype yaml setlocal tabstop=2 shiftwidth=2
 set expandtab
 match ErrorMsg '\s\+$'
-nnoremap <Leader>rtw :%s/\s\+$//e<CR>
+nnoremap <Leader>W :%s/\s\+$//e<CR>
 " python pep8
 au BufNewFile,BufRead *.py
     \set tabstop=4
@@ -45,7 +46,6 @@ set ruler
 " Searching
 set incsearch ignorecase smartcase hlsearch " search as characters are entered
 
-
 " More reasonable scroll keys
 map J <c-e>
 map K <c-y>
@@ -68,8 +68,6 @@ inoremap jk <esc>
 nnoremap <leader>w :w<CR>
 " " turn off search highlight
 nnoremap <leader><space> :nohlsearch<CR>
-" " boot up nerdtree
-map <leader>n :NERDTreeToggle<CR>
 
 nnoremap <leader>v :set paste<CR>
 nnoremap <leader>V :set nopaste<CR>
@@ -86,12 +84,10 @@ call vundle#begin()
 
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
-Plugin 'kien/ctrlp.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'hallison/vim-markdown'
 Plugin 'tpope/vim-fugitive'
-Plugin 'vim-perl/vim-perl'
 Plugin 'bling/vim-bufferline'
 Plugin 'itchyny/lightline.vim'
 Plugin 'heavenshell/vim-jsdoc'
@@ -102,11 +98,6 @@ Plugin 'vim-scripts/indentpython.vim'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
-
-" CtrlP settings
-let g:ctrlp_match_window = 'bottom,order:ttb'
-let g:ctrlp_switch_buffer = 0
-let g:ctrlp_working_path_mode = 0
 
 " Perl syntax stuff
 autocmd BufNewFile,BufRead *.tt setf tt2
@@ -126,6 +117,4 @@ function! LightLineFugitive()
 endfunction
 
 " Templates
-nnoremap <leader>js :-1read $HOME/.vim/templates/skel.js<CR>:%s/@BASENAME@
-nnoremap <leader>py :-1read $HOME/.vim/templates/server.py
 nnoremap <leader>o :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<CR> \| xargs open<CR><CR>
