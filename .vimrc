@@ -1,5 +1,5 @@
 " Don't write any backup or swap files ever.
-" " They're more annoying than they are safe.
+
 set noswapfile
 set nowritebackup
 set nobackup
@@ -116,5 +116,20 @@ function! LightLineFugitive()
   return exists('*fugitive#head') ? fugitive#head() : ''
 endfunction
 
-" Templates
-nnoremap <leader>o :!echo `git url`/blob/`git rev-parse --abbrev-ref HEAD`/%\#L<C-R>=line('.')<CR> \| xargs open<CR><CR>
+function! BFGhUrl()
+    let full_path = expand('%')
+    let bf_path = matchstr(full_path, '/opt/buzzfeed/')
+    if empty(bf_path)
+        echo 'not bf repo'
+        return
+    endif
+    let bf_repo = matchlist(full_path, '^/opt/\zs\v(buzzfeed/(mono|buzzfeed))(/.*)')[1]
+    let bf_file = matchlist(full_path, '^/opt/\zs\v(buzzfeed/(mono|buzzfeed))(/.*)')[3]
+    let bf_branch = system("git rev-parse --abbrev-ref HEAD | sed 's/^ *//;s/ *$//'")
+    let bf_gh = 'https://github.com/'
+    let bf_gh_url = 'https://github.com/' . bf_repo . '/blob/' . matchstr(bf_branch, '\v\w+') . bf_file . '#L' . line('.')
+    call system('open ' . bf_gh_url)
+    echo 'opening... ' . bf_gh_url
+endfunction
+
+nnoremap <leader>o :call BFGhUrl()<cr>
