@@ -12,7 +12,7 @@ set encoding=utf-8
 set tabstop=4
 set shiftwidth=4
 " js files are two spaces...
-autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2
+autocmd Filetype javascript setlocal tabstop=4 shiftwidth=4
 autocmd Filetype yaml setlocal tabstop=2 shiftwidth=2
 set expandtab
 match ErrorMsg '\s\+$'
@@ -93,6 +93,8 @@ Plugin 'itchyny/lightline.vim'
 Plugin 'heavenshell/vim-jsdoc'
 Plugin 'nvie/vim-flake8'
 Plugin 'vim-scripts/indentpython.vim'
+Plugin 'smerrill/vcl-vim-plugin'
+Plugin 'chr4/nginx.vim'
 " Add all your plugins here (note older versions of Vundle used Bundle instead of Plugin)
 
 " All of your Plugins must be added before the following line
@@ -117,19 +119,12 @@ function! LightLineFugitive()
 endfunction
 
 function! BFGhUrl()
-    let full_path = expand('%')
-    let bf_path = matchstr(full_path, '/opt/buzzfeed/')
-    if empty(bf_path)
-        echo 'not bf repo'
-        return
-    endif
-    let bf_repo = matchlist(full_path, '^/opt/\zs\v(buzzfeed/(mono|buzzfeed))(/.*)')[1]
-    let bf_file = matchlist(full_path, '^/opt/\zs\v(buzzfeed/(mono|buzzfeed))(/.*)')[3]
-    let bf_branch = system("git rev-parse --abbrev-ref HEAD | sed 's/^ *//;s/ *$//'")
-    let bf_gh = 'https://github.com/'
-    let bf_gh_url = 'https://github.com/' . bf_repo . '/blob/' . matchstr(bf_branch, '\v\w+') . bf_file . '#L' . line('.')
-    call system('open ' . bf_gh_url)
-    echo 'opening... ' . bf_gh_url
+    let branch = substitute(system("git rev-parse --abbrev-ref HEAD"), '\n', '', '')
+    let git_start = 'https://github.com/buzzfeed/mono/blob/' . branch
+    let line_frag = '#L'. line('.')
+    let full_url = substitute(expand('%:p'), '/opt/buzzfeed/mono', git_start, '') . line_frag
+    call system('open ' . full_url)
+    echo 'opening... ' . full_url
 endfunction
 
 nnoremap <leader>o :call BFGhUrl()<cr>
