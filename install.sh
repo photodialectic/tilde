@@ -273,7 +273,7 @@ done;
 $has_created_links || echo "All of Tilde's files were symlinked already.";
 
 echo "Install vim plugins";
-$dry_run vim +PluginInstall +qall;
+$dry_run vim +PluginInstall +qall &>/dev/null;
 
 echo 'Done.';
 
