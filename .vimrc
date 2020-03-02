@@ -95,6 +95,7 @@ Plugin 'nvie/vim-flake8'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'smerrill/vcl-vim-plugin'
 Plugin 'chr4/nginx.vim'
+Plugin 'MaxMEllon/vim-jsx-pretty'
 " Add all your plugins here (note older versions of Vundle used Bundle instead of Plugin)
 
 " All of your Plugins must be added before the following line
