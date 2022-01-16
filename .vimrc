@@ -83,19 +83,20 @@ call vundle#begin()
 "call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
-Plugin 'pangloss/vim-javascript'
-Plugin 'mustache/vim-mustache-handlebars'
-Plugin 'hallison/vim-markdown'
-Plugin 'tpope/vim-fugitive'
-Plugin 'bling/vim-bufferline'
-Plugin 'itchyny/lightline.vim'
-Plugin 'heavenshell/vim-jsdoc'
-Plugin 'nvie/vim-flake8'
-Plugin 'vim-scripts/indentpython.vim'
-Plugin 'smerrill/vcl-vim-plugin'
-Plugin 'chr4/nginx.vim'
 Plugin 'MaxMEllon/vim-jsx-pretty'
+Plugin 'bling/vim-bufferline'
+Plugin 'chr4/nginx.vim'
+Plugin 'fatih/vim-go'
+Plugin 'gmarik/Vundle.vim'
+Plugin 'hallison/vim-markdown'
+Plugin 'heavenshell/vim-jsdoc'
+Plugin 'itchyny/lightline.vim'
+Plugin 'mustache/vim-mustache-handlebars'
+Plugin 'nvie/vim-flake8'
+Plugin 'pangloss/vim-javascript'
+Plugin 'smerrill/vcl-vim-plugin'
+Plugin 'tpope/vim-fugitive'
+Plugin 'vim-scripts/indentpython.vim'
 " Add all your plugins here (note older versions of Vundle used Bundle instead of Plugin)
 
 " All of your Plugins must be added before the following line
