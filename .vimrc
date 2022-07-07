@@ -12,7 +12,7 @@ set encoding=utf-8
 set tabstop=4
 set shiftwidth=4
 " js files are two spaces...
-autocmd Filetype javascript setlocal tabstop=4 shiftwidth=4
+autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2
 autocmd Filetype yaml setlocal tabstop=2 shiftwidth=2
 set expandtab
 match ErrorMsg '\s\+$'
@@ -96,6 +96,7 @@ Plugin 'vim-scripts/indentpython.vim'
 Plugin 'smerrill/vcl-vim-plugin'
 Plugin 'chr4/nginx.vim'
 Plugin 'MaxMEllon/vim-jsx-pretty'
+Plugin 'psf/black'
 " Add all your plugins here (note older versions of Vundle used Bundle instead of Plugin)
 
 " All of your Plugins must be added before the following line
