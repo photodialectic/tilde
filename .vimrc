@@ -43,6 +43,7 @@ set showcmd             " show command in bottom bar
 " set cursorline          " highlight current line
 set wildmenu            " visual autocomplete for command menu
 set ruler
+set backspace=indent,eol,start
 
 " Searching
 set incsearch ignorecase smartcase hlsearch " search as characters are entered
