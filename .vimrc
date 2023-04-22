@@ -13,6 +13,7 @@ set tabstop=4
 set shiftwidth=4
 " js files are two spaces...
 autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2
+autocmd Filetype javascriptreact setlocal tabstop=2 shiftwidth=2
 autocmd Filetype yaml setlocal tabstop=2 shiftwidth=2
 set expandtab
 match ErrorMsg '\s\+$'
@@ -130,3 +131,15 @@ function! BFGhUrl()
 endfunction
 
 nnoremap <leader>o :call BFGhUrl()<cr>
+
+" complete text on the current line or in visual selection
+nnoremap <leader>a :AI<CR>
+xnoremap <leader>a :AI<CR>
+
+" edit text with a custom prompt
+xnoremap <leader>s :AIEdit fix grammar and spelling<CR>
+nnoremap <leader>s :AIEdit fix grammar and spelling<CR>
+
+" trigger chat
+xnoremap <leader>c :AIChat<CR>
+nnoremap <leader>c :AIChat<CR>
