@@ -144,3 +144,12 @@ nnoremap <leader>s :AIEdit fix grammar and spelling<CR>
 " trigger chat
 xnoremap <leader>c :AIChat<CR>
 nnoremap <leader>c :AIChat<CR>
+
+function! WB2BF()
+    silent! %s/IF NOT EXISTS //g
+    silent! g/ENGINE = InnoDB/delete
+    silent! g/^--.*/delete
+    silent! %s/`mydb`.//g
+    silent! %s/`default_schema`.//g
+    silent! %s/;/|/g
+endfunction
