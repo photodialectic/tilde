@@ -13,7 +13,7 @@ let s:last_instruction = ""
 let s:last_command = ""
 let s:last_config = {}
 
-let s:scratch_buffer_name = ">>> AI chats"
+let s:scratch_buffer_name = ">>> AI chat"
 
 " Configures ai-chat scratch window.
 " - scratch_buffer_keep_open = 0
