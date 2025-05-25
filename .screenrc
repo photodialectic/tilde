@@ -1,10 +1,72 @@
-# Do not show the introduction screen ("Press bla to bla.")
+# Enhanced screen configuration
+# Do not show the introduction screen
 startup_message off
 
-hardstatus alwayslastline
-hardstatus string "%-w%{= BW}%50>%n %t%{-}%+w%<"
-
+# Set scrollback buffer
 defscrollback 32000
+
+# Enable UTF-8
 defutf8 on
 
+# Set terminal type
 term screen-256color
+
+# Status line configuration (using caption instead of hardstatus to avoid double status bars)
+
+# Enable visual bell instead of audio
+vbell on
+
+# Set the caption for each window with background
+caption always "%-w%{= BW}%50>%n %t%{-}%+w%<"
+
+# Key bindings for easier navigation
+# Ctrl+a then | for vertical split (if supported)
+bind | eval "split -v" "focus right" "screen"
+
+# Ctrl+a then - for horizontal split
+bind - eval "split" "focus down" "screen"
+
+# Ctrl+a then h/j/k/l for window navigation
+bind h focus left
+bind j focus down  
+bind k focus up
+bind l focus right
+
+# Ctrl+a then H/J/K/L for window resizing
+bind H eval "resize -h -5"
+bind J eval "resize -v -5"
+bind K eval "resize -v +5"
+bind L eval "resize -h +5"
+
+# Ctrl+a then r to reload config
+bind r source ~/.screenrc
+
+# Set escape character to Ctrl+a (default, but explicit)
+escape ^Aa
+
+# Window numbering starts at 1
+bind c screen 1
+bind ^c screen 1
+bind 0 select 10
+
+# Activity monitoring
+activity "Activity in window %n"
+
+# Enable mouse scrolling (if supported)
+termcapinfo xterm* ti@:te@
+
+# Better navigation
+bind ' ' windowlist -b
+bind '"' windowlist -b
+
+# Copy mode settings
+markkeys "h=^B:l=^F:$=^E"
+
+# Window titles
+shelltitle "$ |bash"
+
+# Auto-detach on hangup
+autodetach on
+
+# Don't block command output
+nonblock on
