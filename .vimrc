@@ -74,36 +74,42 @@ nnoremap <leader><space> :nohlsearch<CR>
 nnoremap <leader>v :set paste<CR>
 nnoremap <leader>V :set nopaste<CR>
 
-set nocompatible              " required
-filetype off                  " required
+" vim-plug setup
+call plug#begin('~/.vim/plugged')
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+" Language support and syntax
+Plug 'MaxMEllon/vim-jsx-pretty'
+Plug 'chr4/nginx.vim'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'heavenshell/vim-jsdoc', { 'for': ['javascript', 'javascript.jsx','typescript'] }
+Plug 'mustache/vim-mustache-handlebars'
+Plug 'nvie/vim-flake8'
+Plug 'pangloss/vim-javascript'
+Plug 'smerrill/vcl-vim-plugin'
+Plug 'vim-scripts/indentpython.vim'
+Plug 'sheerun/vim-polyglot'
 
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+" UI and navigation
+Plug 'itchyny/lightline.vim'
+Plug 'bling/vim-bufferline'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
-" let Vundle manage Vundle, required
-Plugin 'MaxMEllon/vim-jsx-pretty'
-Plugin 'bling/vim-bufferline'
-Plugin 'chr4/nginx.vim'
-Plugin 'fatih/vim-go'
-Plugin 'gmarik/Vundle.vim'
-Plugin 'hallison/vim-markdown'
-Plugin 'heavenshell/vim-jsdoc'
-Plugin 'itchyny/lightline.vim'
-Plugin 'mustache/vim-mustache-handlebars'
-Plugin 'nvie/vim-flake8'
-Plugin 'pangloss/vim-javascript'
-Plugin 'smerrill/vcl-vim-plugin'
-Plugin 'tpope/vim-fugitive'
-Plugin 'vim-scripts/indentpython.vim'
-" Add all your plugins here (note older versions of Vundle used Bundle instead of Plugin)
+" Git integration
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+" Code completion and LSP
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Utilities
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+Plug 'jiangmiao/auto-pairs'
+
+call plug#end()
+
+filetype plugin indent on
 
 " Perl syntax stuff
 autocmd BufNewFile,BufRead *.tt setf tt2
@@ -132,6 +138,37 @@ function! BFGhUrl()
 endfunction
 
 nnoremap <leader>o :call BFGhUrl()<cr>
+
+" FZF mappings
+nnoremap <leader>f :Files<CR>
+nnoremap <leader>b :Buffers<CR>
+nnoremap <leader>g :Rg<CR>
+nnoremap <leader>t :Tags<CR>
+
+" CoC configuration
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <cr> to confirm completion
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 
 " complete text on the current line or in visual selection
 nnoremap <leader>a :AI<CR>

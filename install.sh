@@ -70,8 +70,19 @@ fi;
 source_dir="$(cd "$(dirname "$0")" > /dev/null; pwd)";
 $is_dry_run || target_dir="$(cd "$target_dir" > /dev/null; pwd)";
 
-echo "Get Vundle from submodule";
-$dry_run git submodule init && git submodule update;
+echo "Migrating to Go installer...";
+if command -v go >/dev/null 2>&1; then
+    if [ -f "$source_dir/install.go" ]; then
+        echo "Building and running Go installer";
+        $dry_run cd "$source_dir" && go run install.go "$@";
+        exit $?;
+    else
+        echo "install.go not found, falling back to bash installer";
+    fi;
+else
+    echo "Go not found, falling back to bash installer";
+    echo "Install Go to use the improved installer";
+fi;
 
 # Create the array of files to symlink.
 source_files=();
@@ -273,7 +284,12 @@ done;
 $has_created_links || echo "All of Tilde's files were symlinked already.";
 
 echo "Install vim plugins";
-$dry_run vim +PluginInstall +qall &>/dev/null;
+if [ -f ~/.vim/autoload/plug.vim ]; then
+    $dry_run vim +PlugInstall +qall &>/dev/null;
+else
+    echo "vim-plug not found, skipping plugin installation";
+    echo "Run the Go installer to automatically install vim-plug";
+fi;
 
 echo 'Done.';
 
