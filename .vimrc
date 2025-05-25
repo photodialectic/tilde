@@ -106,6 +106,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'jiangmiao/auto-pairs'
+Plug 'madox2/vim-ai'
 
 call plug#end()
 
@@ -181,6 +182,9 @@ nnoremap <leader>s :AIEdit fix grammar and spelling<CR>
 " trigger chat
 xnoremap <leader>c :AIChat<CR>
 nnoremap <leader>c :AIChat<CR>
+
+" Override write command in AI chat buffers
+autocmd FileType aichat nnoremap <buffer> <leader>w :AIChat<CR>
 
 function! WB2BF()
     silent! %s/IF NOT EXISTS //g

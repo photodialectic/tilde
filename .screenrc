@@ -17,7 +17,7 @@ term screen-256color
 vbell on
 
 # Set the caption for each window with background
-caption always "%{= kb}%{+b}%-w%{= BW}%n %t%{-}%+w %-= @%H - %LD %d %LM - %c%{-}"
+caption always "%-w%{= BW}%50>%n %t%{-}%+w%<"
 
 # Key bindings for easier navigation
 # Ctrl+a then | for vertical split (if supported)
