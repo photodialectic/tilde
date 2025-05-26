@@ -1,62 +1,41 @@
 # ~
-My dot files repo with modern vim and screen configuration.
+My dotfiles repository: modern Vim, tmux, and screen configurations with an enhanced installer.
 
 ## Features
-- **Modern Vim Setup**: Migrated from Vundle to vim-plug with LSP support via CoC
-- **Enhanced Plugins**: FZF integration, Git gutter, auto-pairs, and more
-- **Go Installer**: Fast, concurrent installation with better error handling
-- **Smart Conflict Resolution**: Automatic backup of existing files
+
+- **Modern Vim Setup**: Migrated to vim-plug and CoC.nvim for LSP-based code completion.
+- **Enhanced Vim Plugins**: vim-go, vim-polyglot, lightline, bufferline, vim-fugitive, vim-gitgutter, surround, commentary, GitHub Copilot, and AI-assisted editing.
+- **Modern tmux Configuration**: Ctrl‑a prefix, 256‑color terminals, mouse support, vim-like pane navigation, pane resizing, and optional TPM plugin manager.
+- **Enhanced screen Configuration**: Improved scrollback, UTF‑8 support, splits, vim‑like navigation, and a clean status line.
+- **Go-based Installer**: Fast installation tool written in Go with better error handling, cross‑platform support, and automatic backups.
+- **Smart Conflict Resolution**: Existing files are automatically backed up before being replaced by symlinks.
 
 ## Installation
 
 ### Quick Install (Recommended)
+
 ```bash
 cd ~
-git clone https://github.com/photodialectic/tilde
+git clone https://github.com/janmoesen/tilde.git
 cd tilde
 ./install.sh
 ```
 
-### Go Installer (Enhanced)
-If you have Go installed:
+### Go-based Installer (Enhanced)
+
+If you have Go installed, you can use the Go installer:
+
 ```bash
 go build install.go
-./install [--dry-run] [--prefix=$HOME] [--verbose]
+./install --prefix="$HOME" [--dry-run] [--verbose]
 ```
 
-### Manual Plugin Setup
-After installation, vim plugins will be automatically installed. For manual installation:
+## Manual Plugin Setup
+
+### Vim Plugins
+
+Vim plugins are installed automatically by `install.sh`. To install or update plugins manually:
+
 ```bash
 vim +PlugInstall +qall
-```
-
-## Key Improvements
-
-### Vim Configuration
-- **Plugin Manager**: Upgraded from Vundle to vim-plug
-- **LSP Support**: CoC.nvim for intelligent code completion
-- **Fuzzy Finding**: FZF integration for file/buffer navigation
-- **Git Integration**: Enhanced with git-gutter for diff indicators
-- **Modern Syntax**: vim-polyglot for comprehensive language support
-
-### Key Bindings
-- `<leader>f` - Find files with FZF
-- `<leader>g` - Search in files with ripgrep
-- `<leader>b` - Buffer switcher
-- `gd` - Go to definition (LSP)
-- `gr` - Find references (LSP)
-- `[g`/`]g` - Navigate diagnostics
-
-### Go Installer Benefits
-- ⚡ Concurrent operations for faster installation
-- 🛡️ Better error handling and validation
-- 📦 Automatic vim-plug installation
-- 🔄 Smart conflict resolution with backups
-- 🎯 Cross-platform compatibility
-
-## Update
-
-```bash
-cd ~/tilde
-./install.sh
 ```
