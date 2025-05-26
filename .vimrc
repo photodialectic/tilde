@@ -11,6 +11,7 @@ set encoding=utf-8
 " spaces & tabs
 set tabstop=4
 set shiftwidth=4
+
 " js files are two spaces...
 autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2
 autocmd Filetype javascriptreact setlocal tabstop=2 shiftwidth=2
@@ -18,6 +19,7 @@ autocmd Filetype yaml setlocal tabstop=2 shiftwidth=2
 set expandtab
 match ErrorMsg '\s\+$'
 nnoremap <Leader>W :%s/\s\+$//e<CR>
+
 " python pep8
 au BufNewFile,BufRead *.py
     \set tabstop=4
@@ -76,15 +78,7 @@ nnoremap <leader>V :set nopaste<CR>
 call plug#begin('~/.vim/plugged')
 
 " Language support and syntax
-Plug 'MaxMEllon/vim-jsx-pretty'
-Plug 'chr4/nginx.vim'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-Plug 'heavenshell/vim-jsdoc', { 'for': ['javascript', 'javascript.jsx','typescript'] }
-Plug 'mustache/vim-mustache-handlebars'
-Plug 'nvie/vim-flake8'
-Plug 'pangloss/vim-javascript'
-Plug 'smerrill/vcl-vim-plugin'
-Plug 'vim-scripts/indentpython.vim'
 Plug 'sheerun/vim-polyglot'
 
 " UI and navigation
@@ -98,7 +92,6 @@ Plug 'airblade/vim-gitgutter'
 " Utilities
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
-Plug 'jiangmiao/auto-pairs'
 Plug 'madox2/vim-ai'
 Plug 'github/copilot.vim'
 

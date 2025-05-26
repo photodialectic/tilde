@@ -28,7 +28,7 @@ bind - eval "split" "focus down" "screen"
 
 # Ctrl+a then h/j/k/l for window navigation
 bind h focus left
-bind j focus down  
+bind j focus down
 bind k focus up
 bind l focus right
 
@@ -47,7 +47,6 @@ escape ^Aa
 # Window numbering starts at 1
 bind c screen 1
 bind ^c screen 1
-bind 0 select 10
 
 # Activity monitoring
 activity "Activity in window %n"
