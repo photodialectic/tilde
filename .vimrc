@@ -37,10 +37,8 @@ autocmd FileType markdown set showbreak=
 autocmd FileType txt set showbreak=
 
 " ui config
-" set clipboard=unnamed
 set number              " show line numbers
 set showcmd             " show command in bottom bar
-" set cursorline          " highlight current line
 set wildmenu            " visual autocomplete for command menu
 set ruler
 set backspace=indent,eol,start
@@ -107,6 +105,9 @@ Plug 'github/copilot.vim'
 call plug#end()
 
 filetype plugin indent on
+
+" go settings
+let g:go_version_warning = 0
 
 " Perl syntax stuff
 autocmd BufNewFile,BufRead *.tt setf tt2
