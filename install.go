@@ -232,12 +232,15 @@ func findConflicts(config *Config, sourceFiles []string) ([]string, error) {
 			continue
 		}
 
-		// Check if they're the same file (already symlinked)
-		if os.SameFile != nil {
-			sourceInfo, err1 := os.Stat(sourcePath)
-			targetInfo, err2 := os.Stat(targetPath)
-			if err1 == nil && err2 == nil && os.SameFile(sourceInfo, targetInfo) {
-				continue
+		// Check if already correctly symlinked
+		if linkTarget, err := os.Readlink(targetPath); err == nil {
+			// Convert to absolute path for comparison
+			targetDir := filepath.Dir(targetPath)
+			if !filepath.IsAbs(linkTarget) {
+				linkTarget = filepath.Join(targetDir, linkTarget)
+			}
+			if absLinkTarget, err := filepath.Abs(linkTarget); err == nil && absLinkTarget == sourcePath {
+				continue // Already correctly symlinked
 			}
 		}
 
@@ -317,6 +320,61 @@ func handleConflicts(config *Config, conflicts []string) bool {
 	return true
 }
 
+func handleExistingFile(config *Config, file, targetPath string) bool {
+	if config.DryRun {
+		fmt.Printf("Would handle existing file: %s\n", targetPath)
+		return true
+	}
+
+	// Check if it's a symlink or regular file
+	linkTarget, isSymlink := "", false
+	if target, err := os.Readlink(targetPath); err == nil {
+		linkTarget = target
+		isSymlink = true
+	}
+
+	fmt.Printf("\n⚠️  File already exists: %s\n", targetPath)
+	if isSymlink {
+		fmt.Printf("   Currently symlinks to: %s\n", linkTarget)
+	} else {
+		fmt.Printf("   This is a regular file\n")
+	}
+
+	fmt.Print("Choose action: (r)eplace, (b)ackup and replace, (s)kip [s]: ")
+	reader := bufio.NewReader(os.Stdin)
+	response, _ := reader.ReadString('\n')
+	response = strings.ToLower(strings.TrimSpace(response))
+
+	if response == "" || response == "s" || response == "skip" {
+		fmt.Printf("⏭️  Skipped: %s\n", file)
+		return false
+	}
+
+	if response == "b" || response == "backup" {
+		// Create backup with timestamp
+		backupSuffix := fmt.Sprintf(".tilde-%s", time.Now().Format("20060102-150405"))
+		backupPath := targetPath + backupSuffix
+
+		if err := os.Rename(targetPath, backupPath); err != nil {
+			log.Printf("Failed to backup %s: %v", targetPath, err)
+			return false
+		}
+		fmt.Printf("📦 Backed up to: %s\n", backupPath)
+		return true
+	}
+
+	if response == "r" || response == "replace" {
+		if err := os.Remove(targetPath); err != nil {
+			log.Printf("Failed to remove %s: %v", targetPath, err)
+			return false
+		}
+		return true
+	}
+
+	fmt.Printf("Invalid choice '%s', skipping file\n", response)
+	return false
+}
+
 func createSymlinks(config *Config, sourceFiles []string) error {
 	linkCount := 0
 
@@ -334,10 +392,22 @@ func createSymlinks(config *Config, sourceFiles []string) error {
 			}
 		}
 
-		// Check if symlink already exists
+		// Check if symlink already exists and points to correct target
 		if linkTarget, err := os.Readlink(targetPath); err == nil {
-			if linkTarget == sourcePath {
-				continue // Already correctly symlinked
+			// Convert to absolute path for comparison
+			if !filepath.IsAbs(linkTarget) {
+				linkTarget = filepath.Join(targetDir, linkTarget)
+			}
+			if absLinkTarget, err := filepath.Abs(linkTarget); err == nil && absLinkTarget == sourcePath {
+				continue // Already correctly symlinked, silently skip
+			}
+		}
+
+		// Check if any file exists at target path
+		if _, err := os.Lstat(targetPath); err == nil {
+			// File exists, ask user what to do
+			if !handleExistingFile(config, file, targetPath) {
+				continue // User chose to skip this file
 			}
 		}
 
@@ -351,7 +421,8 @@ func createSymlinks(config *Config, sourceFiles []string) error {
 			fmt.Printf("Would symlink: %s -> %s\n", targetPath, relSource)
 		} else {
 			if err := os.Symlink(relSource, targetPath); err != nil {
-				return fmt.Errorf("failed to create symlink %s: %v", targetPath, err)
+				log.Printf("Warning: Failed to create symlink %s: %v", targetPath, err)
+				continue
 			}
 			if config.Verbose {
 				fmt.Printf("🔗 Linked: %s\n", file)
