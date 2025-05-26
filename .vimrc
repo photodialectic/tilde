@@ -92,21 +92,17 @@ Plug 'sheerun/vim-polyglot'
 " UI and navigation
 Plug 'itchyny/lightline.vim'
 Plug 'bling/vim-bufferline'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
 
 " Git integration
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
-
-" Code completion and LSP
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Utilities
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'jiangmiao/auto-pairs'
 Plug 'madox2/vim-ai'
+Plug 'github/copilot.vim'
 
 call plug#end()
 
@@ -130,46 +126,37 @@ function! LightLineFugitive()
 endfunction
 
 function! BFGhUrl()
+    " Get current branch
     let branch = substitute(system("git rev-parse --abbrev-ref HEAD"), '\n', '', '')
-    let git_start = 'https://github.com/buzzfeed/mono/blob/' . branch
+
+    " Get git repository root
+    let git_root = substitute(system("git rev-parse --show-toplevel"), '\n', '', '')
+
+    " Get remote URL and convert to GitHub URL
+    let remote_url = substitute(system("git config --get remote.origin.url"), '\n', '', '')
+
+    " Convert SSH/HTTPS git URLs to GitHub web URLs
+    if remote_url =~ '^git@github\.com:'
+        let github_url = substitute(remote_url, 'git@github\.com:', 'https://github.com/', '')
+        let github_url = substitute(github_url, '\.git$', '', '')
+    elseif remote_url =~ '^https://github\.com/'
+        let github_url = substitute(remote_url, '\.git$', '', '')
+    else
+        echo 'Error: Not a GitHub repository'
+        return
+    endif
+
+    " Build the URL
+    let git_start = github_url . '/blob/' . branch
     let line_frag = '#L'. line('.')
-    let full_url = substitute(expand('%:p'), '/opt/buzzfeed/mono', git_start, '') . line_frag
+    let rel_path = substitute(expand('%:p'), git_root, '', '')
+    let full_url = git_start . rel_path . line_frag
+
     call system('open ' . full_url)
     echo 'opening... ' . full_url
 endfunction
 
 nnoremap <leader>o :call BFGhUrl()<cr>
-
-" FZF mappings
-nnoremap <leader>f :Files<CR>
-nnoremap <leader>b :Buffers<CR>
-nnoremap <leader>g :Rg<CR>
-nnoremap <leader>t :Tags<CR>
-
-" CoC configuration
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use <cr> to confirm completion
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
-" Use `[g` and `]g` to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-" GoTo code navigation
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
 
 " complete text on the current line or in visual selection
 nnoremap <leader>a :AI<CR>
@@ -185,12 +172,3 @@ nnoremap <leader>c :AIChat<CR>
 
 " Override write command in AI chat buffers
 autocmd FileType aichat nnoremap <buffer> <leader>w :AIChat<CR>
-
-function! WB2BF()
-    silent! %s/IF NOT EXISTS //g
-    silent! g/ENGINE = InnoDB/delete
-    silent! g/^--.*/delete
-    silent! %s/`mydb`.//g
-    silent! %s/`default_schema`.//g
-    silent! %s/;/|/g
-endfunction
