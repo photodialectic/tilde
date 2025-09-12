@@ -1,3 +1,6 @@
+//go:build !tildecli
+// +build !tildecli
+
 package main
 
 import (
