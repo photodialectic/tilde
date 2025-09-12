@@ -90,8 +90,8 @@ func ensureImage() error {
 		return fmt.Errorf("docker images check failed: %w", err)
 	}
 	if len(bytes.TrimSpace(out)) == 0 {
-		// Default: do not install plugins at build (runtime fallback will try)
-		return buildImage(false)
+		// Default: install plugins at build time for faster container startup
+		return buildImage(true)
 	}
 	return nil
 }
@@ -334,9 +334,11 @@ func main() {
 		if os.Args[1] == "build" {
 			// Support build options, e.g., --with-plugins
 			bfs := flag.NewFlagSet("build", flag.ContinueOnError)
-			withPlugins := bfs.Bool("with-plugins", false, "Pre-install Vim plugins at image build time")
+			withPlugins := bfs.Bool("with-plugins", true, "Pre-install Vim plugins at image build time")
+			noPlugins := bfs.Bool("no-plugins", false, "Skip plugin installation at build time")
 			_ = bfs.Parse(os.Args[2:])
-			if err := buildImage(*withPlugins); err != nil {
+			installPlugins := *withPlugins && !*noPlugins
+			if err := buildImage(installPlugins); err != nil {
 				fmt.Fprintf(os.Stderr, "build failed: %v\n", err)
 				os.Exit(1)
 			}
