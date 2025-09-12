@@ -70,16 +70,27 @@ RUN set -eux; \
 # Switch to non-root by default
 USER node
 
-# Optional: pre-install Vim plugins at build time for the node user
-# Enable with: --build-arg INSTALL_PLUGINS=1
-ARG INSTALL_PLUGINS=0
+# Pre-install Vim plugins at build time for the node user
+# Disable with: --build-arg INSTALL_PLUGINS=0
+ARG INSTALL_PLUGINS=1
 RUN if [ "$INSTALL_PLUGINS" = "1" ]; then \
       set -eux; \
       export HOME=/home/node; \
       export TERM=xterm-256color; \
-      vim -E -s -u "$HOME/.vimrc" +"PlugInstall --sync" +"PlugUpdate --sync" +qall || true; \
-      # Non-fatal if network blocks GitHub during build
-      true; \
+      # Install plugins with better error handling and retry logic
+      echo "Installing vim plugins at build time..."; \
+      vim -E -s -u "$HOME/.vimrc" +"PlugInstall --sync" +qall || { \
+        echo "First plugin install attempt failed, retrying..."; \
+        sleep 2; \
+        vim -E -s -u "$HOME/.vimrc" +"PlugInstall --sync" +qall || true; \
+      }; \
+      # Verify plugins were installed
+      if [ -d "$HOME/.vim/plugged" ] && [ "$(ls -A $HOME/.vim/plugged 2>/dev/null)" ]; then \
+        echo "Vim plugins successfully installed at build time"; \
+        ls -la "$HOME/.vim/plugged"; \
+      else \
+        echo "Warning: Plugin installation may have failed, but continuing build"; \
+      fi; \
     else \
       echo "Skipping plugin install at build time (INSTALL_PLUGINS=0)"; \
     fi
