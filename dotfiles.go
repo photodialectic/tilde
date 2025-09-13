@@ -93,14 +93,20 @@ func installDotfiles(config *Config) error {
 			fmt.Printf("🔍 Found existing %s at %s\n", dotfile, targetPath)
 			if info.Mode()&os.ModeSymlink != 0 {
 				// It's already a symlink - check if it points to our file
-				if target, err := os.Readlink(targetPath); err == nil && target == sourcePath {
-					fmt.Printf("✓ %s already correctly symlinked\n", dotfile)
-					continue
+				if target, err := os.Readlink(targetPath); err == nil {
+					resolvedTarget, err1 := filepath.EvalSymlinks(targetPath)
+					resolvedSource, err2 := filepath.EvalSymlinks(sourcePath)
+					if err1 == nil && err2 == nil && resolvedTarget == resolvedSource {
+						fmt.Printf("✓ %s already correctly symlinked\n", dotfile)
+						continue
+					}
 				}
 				// Remove incorrect symlink
 				fmt.Printf("🔄 Removing incorrect symlink: %s\n", dotfile)
 				if !config.DryRun {
-					os.Remove(targetPath)
+					if err := os.Remove(targetPath); err != nil {
+						return fmt.Errorf("failed to remove incorrect symlink %s: %w", dotfile, err)
+					}
 				}
 			} else {
 				// It's a regular file - back it up
@@ -109,17 +115,23 @@ func installDotfiles(config *Config) error {
 					if err := copyFile(targetPath, backupPath); err != nil {
 						return fmt.Errorf("failed to backup %s: %w", dotfile, err)
 					}
-					os.Remove(targetPath)
+					if err := os.Remove(targetPath); err != nil {
+						return fmt.Errorf("failed to remove %s after backup: %w", dotfile, err)
+					}
 				}
 			}
 		} else {
 			fmt.Printf("📝 No existing %s found at %s\n", dotfile, targetPath)
 		}
 
-		// Create symlink
-		fmt.Printf("🔗 Symlinking %s -> %s\n", dotfile, sourcePath)
+		// Create symlink using relative path for portability
+		relSourcePath, err := filepath.Rel(filepath.Dir(targetPath), sourcePath)
+		if err != nil {
+			return fmt.Errorf("failed to compute relative path for %s: %w", dotfile, err)
+		}
+		fmt.Printf("🔗 Symlinking %s -> %s\n", dotfile, relSourcePath)
 		if !config.DryRun {
-			if err := os.Symlink(sourcePath, targetPath); err != nil {
+			if err := os.Symlink(relSourcePath, targetPath); err != nil {
 				return fmt.Errorf("failed to create symlink for %s: %w", dotfile, err)
 			}
 		}
@@ -139,7 +151,10 @@ func uninstallDotfiles(config *Config) error {
 				// Remove symlink
 				fmt.Printf("🗑️  Removing symlink: %s\n", dotfile)
 				if !config.DryRun {
-					os.Remove(targetPath)
+					if err := os.Remove(targetPath); err != nil {
+						fmt.Printf("⚠️  Failed to remove symlink %s: %v\n", dotfile, err)
+						continue
+					}
 				}
 			} else {
 				fmt.Printf("⚠️  %s is not a symlink, skipping\n", dotfile)
@@ -157,7 +172,9 @@ func uninstallDotfiles(config *Config) error {
 				if err := copyFile(backupPath, targetPath); err != nil {
 					return fmt.Errorf("failed to restore backup for %s: %w", dotfile, err)
 				}
-				os.Remove(backupPath)
+				if err := os.Remove(backupPath); err != nil {
+					fmt.Printf("⚠️  Failed to remove backup file %s: %v\n", backupPath, err)
+				}
 			}
 		}
 	}
@@ -165,7 +182,9 @@ func uninstallDotfiles(config *Config) error {
 	// Remove backup directory if empty
 	if !config.DryRun {
 		if entries, err := os.ReadDir(config.BackupDir); err == nil && len(entries) == 0 {
-			os.Remove(config.BackupDir)
+			if err := os.Remove(config.BackupDir); err != nil {
+				fmt.Printf("⚠️  Failed to remove backup directory %s: %v\n", config.BackupDir, err)
+			}
 		}
 	}
 
