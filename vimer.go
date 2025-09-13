@@ -16,7 +16,7 @@ import (
 
 // We embed the minimal build context needed by the Dockerfile.
 //
-//go:embed Dockerfile .vimrc .tmux.conf .screenrc install-vim-plug.sh
+//go:embed Dockerfile .vimrc .tmux.conf .screenrc
 var dockerContextFS embed.FS
 
 func usage(prog string) {
@@ -50,7 +50,7 @@ func prepareBuildContext() (string, error) {
 		return "", err
 	}
 	// Write each embedded file into the temp dir
-	entries := []string{"Dockerfile", ".vimrc", ".tmux.conf", ".screenrc", "install-vim-plug.sh"}
+	entries := []string{"Dockerfile", ".vimrc", ".tmux.conf", ".screenrc"}
 	for _, name := range entries {
 		data, err := dockerContextFS.ReadFile(name)
 		if err != nil {
