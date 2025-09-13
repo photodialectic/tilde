@@ -93,7 +93,7 @@ func installDotfiles(config *Config) error {
 			fmt.Printf("🔍 Found existing %s at %s\n", dotfile, targetPath)
 			if info.Mode()&os.ModeSymlink != 0 {
 				// It's already a symlink - check if it points to our file
-				if target, err := os.Readlink(targetPath); err == nil {
+				if _, err := os.Readlink(targetPath); err == nil {
 					resolvedTarget, err1 := filepath.EvalSymlinks(targetPath)
 					resolvedSource, err2 := filepath.EvalSymlinks(sourcePath)
 					if err1 == nil && err2 == nil && resolvedTarget == resolvedSource {
