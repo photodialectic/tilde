@@ -40,4 +40,4 @@ uninstall:
 # Clean up build artifacts
 clean:
 	rm -f $(BIN)
-	docker rmi claudex 2>/dev/null || true
+	docker rmi tilde 2>/dev/null || true
