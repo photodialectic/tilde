@@ -169,9 +169,7 @@ func run(args []string) error {
 	if !*noConfigMount {
 		hostCfg := *configPath
 		if hostCfg == "" {
-			if xdg, err := os.UserConfigDir(); err == nil && xdg != "" {
-				hostCfg = xdg
-			} else if home, err := os.UserHomeDir(); err == nil && home != "" {
+			if home, err := os.UserHomeDir(); err == nil && home != "" {
 				hostCfg = filepath.Join(home, ".config")
 			}
 		}
