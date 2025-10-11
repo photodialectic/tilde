@@ -97,6 +97,8 @@ Plug 'github/copilot.vim'
 
 call plug#end()
 
+noremap <C-a> <Nop>
+
 filetype plugin indent on
 
 " go settings
