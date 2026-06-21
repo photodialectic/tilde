@@ -1,5 +1,5 @@
 # ~
-My dotfiles repository: modern Vim, tmux, and screen configurations with an enhanced installer.
+My dotfiles: modern Vim, tmux, and screen configurations with an enhanced installer.
 
 ## Features
 
