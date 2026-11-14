@@ -13,11 +13,12 @@ import (
 )
 
 type Config struct {
-	DryRun    bool
-	TargetDir string
-	SourceDir string
-	Uninstall bool
-	BackupDir string
+	DryRun         bool
+	TargetDir      string
+	SourceDir      string
+	Uninstall      bool
+	BackupDir      string
+	SkipVimPlugins bool
 }
 
 var dotfiles = []string{
@@ -32,6 +33,7 @@ func main() {
 	flag.BoolVar(&config.DryRun, "dry-run", false, "Show what would be done without executing")
 	flag.StringVar(&config.TargetDir, "prefix", os.Getenv("HOME"), "Target directory for installation")
 	flag.BoolVar(&config.Uninstall, "uninstall", false, "Uninstall dotfiles and restore backups")
+	flag.BoolVar(&config.SkipVimPlugins, "skip-vim-plugins", false, "Skip vim plugin installation")
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: %s [options]\n", os.Args[0])
 		flag.PrintDefaults()
@@ -61,7 +63,9 @@ func main() {
 			os.Exit(1)
 		}
 
-		if err := installVimPlugins(config); err != nil {
+		if config.SkipVimPlugins || os.Getenv("SKIP_VIM_PLUGINS") != "" {
+			fmt.Println("⏭️  Skipping vim plugin installation")
+		} else if err := installVimPlugins(config); err != nil {
 			fmt.Printf("⚠️  Vim plugins installation failed: %v\n", err)
 		}
 

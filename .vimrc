@@ -75,10 +75,11 @@ nnoremap <leader>v :set paste<CR>
 nnoremap <leader>V :set nopaste<CR>
 
 " vim-plug setup
+let g:plug_threads = 32
 call plug#begin('~/.vim/plugged')
 
 " Language support and syntax
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'fatih/vim-go', { 'for': 'go' }
 Plug 'sheerun/vim-polyglot'
 
 " UI and navigation
